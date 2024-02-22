@@ -17,7 +17,9 @@ import java.util.Optional;
 //RequestMapping means that all APIs URL will start with the given prefix
 //Autowired injects the FileRepository Bean to the local variable
 //GetMapping defines the route
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.0.121:3000", "http://192.168.0.121:80"})
+//@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin
 @RestController
 @RequestMapping("api")
 
