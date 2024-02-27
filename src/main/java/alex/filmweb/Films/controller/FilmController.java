@@ -82,5 +82,15 @@ public class FilmController {
         }
     }
 
+    @PostMapping("/films")
+    public ResponseEntity<Film> createFilm(@RequestBody Film film) {
+        try {
+            Film _film = filmRepository.save(new Film(film.getTitle(), film.getImdbid(), film.getYear(),
+                    film.getRuntime(), film.getImdb_rating(), film.getClassification(), film.getMedia_type(), film.getWatched()));
+            return new ResponseEntity<>(_film, HttpStatus.CREATED);
+        } catch (Exception e){
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 }

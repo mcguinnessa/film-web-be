@@ -1,18 +1,27 @@
 package alex.filmweb.Films.model;
 
+import jakarta.validation.constraints.NotEmpty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import jakarta.validation.constraints.NotNull;
 
 // This overrides the collection name
+//Not using Entity as that maps to a table in a relational DB, Documents defines it as a NoSQL DB
+// (specifically Mongo)
 @Document(collection = "films")
 public class Film {
 
     @Id
     private String id;
 
+
     private String imdbid;
 
+    @NotNull
+    @NotEmpty
     private String title;
+    @NotNull
+    @NotEmpty
     private Short year;
     private Short runtime;
     private Float imdb_rating;
@@ -29,6 +38,12 @@ public class Film {
         this.classification = classification;
         this.media_type = media_type;
         this.watched = watched;
+    }
+
+    public Film(String title, Short year, String media_type){
+        this.title = title;
+        this.year = year;
+        this.media_type = media_type;
     }
 
     public Film(){
