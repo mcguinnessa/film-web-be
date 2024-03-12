@@ -13,7 +13,7 @@ import java.util.List;
 // without implementing these methods.
 public interface FilmRepository extends MongoRepository<Film, String> {
 
-    Film findByTitleAndYear(String title, Short year);
+    List<Film> findByTitleAndYear(String title, Short year);
 //    Film findByImdbId(Integer id);
 
 //    Film createFilm(Film film);
