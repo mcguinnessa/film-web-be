@@ -4,6 +4,10 @@ import jakarta.validation.constraints.NotEmpty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.format.annotation.DateTimeFormat;
+
+
+import java.util.Date;
 
 // This overrides the collection name
 //Not using Entity as that maps to a table in a relational DB, Documents defines it as a NoSQL DB
@@ -28,6 +32,9 @@ public class Film {
     private String classification;
     private String media_type;
     private Boolean watched;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private Date updated = new Date();
 
     public Film(String title, String imdbid, Short year, Short runtime, Float imdb_rating, String classification, String media_type, Boolean watched){
         this.title = title;
@@ -106,6 +113,15 @@ public class Film {
         this.watched = watched;
     }
 
+    public Date getUpdated(){
+        return updated;
+    }
+
+    public void setUpdated(Date updated){
+        this.updated = updated;
+    }
+
+
     @Override
     public String toString() {
         return "Film{" +
@@ -117,7 +133,8 @@ public class Film {
                 ", imdb_rating=" + imdb_rating +
                 ", classification='" + classification + '\'' +
                 ", media_type='" + media_type + '\'' +
-                ", watched=" + watched +
+                ", watched=" + watched + '\'' +
+                ", updated=" + updated +
                 '}';
     }
 
