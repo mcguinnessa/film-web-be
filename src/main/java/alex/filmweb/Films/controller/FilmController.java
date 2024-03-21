@@ -105,7 +105,7 @@ public class FilmController {
 
     @PostMapping("/film")
     public ResponseEntity<Film> createFilm(@RequestBody Film film) {
-        System.out.println("Called for /films POST");
+        System.out.println("Called for /films POST:" + film.toString());
         try {
             Film _film = filmRepository.save(new Film(film.getTitle(), film.getImdbid(), film.getYear(),
                     film.getRuntime(), film.getImdb_rating(), film.getClassification(), film.getMedia_type(), film.getWatched()));
