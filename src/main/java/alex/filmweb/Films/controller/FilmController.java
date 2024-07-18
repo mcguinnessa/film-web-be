@@ -103,6 +103,25 @@ public class FilmController {
         }
     }
 
+    @GetMapping("/unwatched")
+    public ResponseEntity<List<Film>> getUnwatchedFilms(){
+        System.out.println("Called for /films");
+        try{
+            List<Film> films = filmRepository.findByWatchedIs(false);
+
+            if(films.isEmpty()){
+                System.out.println("Films is empty");
+                return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+            }
+
+            return new ResponseEntity<>(films, HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println("Error on Films " + e.getLocalizedMessage());
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
     @PostMapping("/film")
     public ResponseEntity<Film> createFilm(@RequestBody Film film) {
         System.out.println("Called for /films POST:" + film.toString());
@@ -115,4 +134,35 @@ public class FilmController {
         }
     }
 
+
+    @PutMapping("/film/set")
+    public ResponseEntity<Film> setParam(@RequestParam("title") String title, @RequestParam("year") Short year, @RequestParam("watched") Boolean watched) {
+        System.out.println("Called for /film PUT " + title + " " + year.toString() + " watched:" + watched.toString());
+
+        try {
+
+            List<Film> _films = filmRepository.findByTitleAndYear(title, year);
+
+            System.out.println("_film:" + _films.toString());
+            if(_films.size() == 1){
+                Film file_to_update = _films.get(0);
+                file_to_update.setWatched(watched);
+                //rc = setWatchedForId(_films[0].id)
+                System.out.println("Setting Watched:");
+                Film _film = filmRepository.save(file_to_update);
+            } else{
+                System.out.println("Too many films returned:" + _films.size());
+                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            return new ResponseEntity<>(_films.get(0), HttpStatus.OK);
+
+
+//            Film _film = filmRepository.save(new Film(film.getTitle(), film.getImdbid(), film.getYear(),
+//                    film.getRuntime(), film.getImdb_rating(), film.getClassification(), film.getMedia_type(), film.getWatched()));
+//            return new ResponseEntity<>(_film, HttpStatus.CREATED);
+        } catch (Exception e){
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

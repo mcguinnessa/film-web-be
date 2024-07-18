@@ -14,6 +14,14 @@ import java.util.List;
 public interface FilmRepository extends MongoRepository<Film, String> {
 
     List<Film> findByTitleAndYear(String title, Short year);
+
+//    @Modifying
+//    @Query("update Film ear set ear.status = ?1 where ear.id = ?2")
+//    int setStatusForEARAttachment(Integer status, Long id);
+    List<Film> findByWatchedIs(boolean isWatched);
+
+//    int setWatchedForId(String id)
+
 //    Film findByImdbId(Integer id);
 
 //    Film createFilm(Film film);
