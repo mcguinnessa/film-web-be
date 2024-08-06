@@ -143,16 +143,17 @@ public class FilmController {
 //    public ResponseEntity<Film> getFilmByImdbId(@PathVariable("id") String id){
 //        System.out.println("Called for /films/{id}");
 
-    @PatchMapping("/film/{id}")
-    public ResponseEntity<Film> setParam(@PathVariable("id") String id, @RequestBody Film partial) {
-        System.out.println("Called for /film PATCH " + id + " partial:" + partial.toString());
+    @PatchMapping("/film/{imdbid}")
+    public ResponseEntity<Film> setParam(@PathVariable("imdbid") String imdbid, @RequestBody Film partial) {
+        System.out.println("Called for /film PATCH " + imdbid + " partial:" + partial.toString());
 
         try {
-            Optional<Film> found = filmRepository.findById(id);
+            List<Film> found = filmRepository.findByImdbid(imdbid);
+            //Optional<Film> found = filmRepository.findById(id);
             if(found.isEmpty()){
                 return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
             }
-            Film _found = found.get();
+            Film _found = found.get(0);
             System.out.println("Update Field(found):" + _found.getUpdated().toString());
 
             Class<?> filmClass= Film.class;
