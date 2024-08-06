@@ -59,18 +59,21 @@ public class FilmController {
     }
 
 
-    @GetMapping("/film/{id}")
-    public ResponseEntity<Film> getFilmByImdbId(@PathVariable("id") String id){
-        System.out.println("Called for /films/{id}");
+    @GetMapping("/film/{imdbid}")
+    public ResponseEntity<Film> getFilmByImdbId(@PathVariable("imdbid") String imdbid){
+        System.out.println("Called for /films/{imdbid}");
         try{
 
-            Optional<Film> film = filmRepository.findById(id);
+            //Optional<Film> film = filmRepository.findById(id);
+            List<Film> film = filmRepository.findByImdbid(imdbid);
 
-            if(film.isPresent()){
-                return new ResponseEntity<>(film.get(), HttpStatus.OK);
+//            if(film.isPresent()){
+            if(!film.isEmpty()){
+                return new ResponseEntity<>(film.get(0), HttpStatus.OK);
             } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                   return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
+
 
 //            List<Film> films = new ArrayList<Film>();
 //

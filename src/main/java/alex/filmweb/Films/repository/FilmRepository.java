@@ -15,6 +15,8 @@ public interface FilmRepository extends MongoRepository<Film, String> {
 
     List<Film> findByTitleAndYear(String title, Short year);
 
+    List<Film> findByImdbid(String imdbid);
+
 //    @Modifying
 //    @Query("update Film ear set ear.status = ?1 where ear.id = ?2")
 //    int setStatusForEARAttachment(Integer status, Long id);
