@@ -49,19 +49,22 @@ public class FilmController {
             if(asc){
                 sort_direction = Sort.Direction.ASC;
             }
-
             List<Film> films = new ArrayList<Film>();
 
-            Pageable pageable = Pageable.unpaged();
+            //Pageable pageable = Pageable.unpaged();
             if (null != limit){
-                pageable = PageRequest.of(0, Integer.parseInt(limit), Sort.by(sort_direction, sort));
+                Pageable pageable = PageRequest.of(0, Integer.parseInt(limit), Sort.by(sort_direction, sort));
+                filmRepository.findAll(pageable).forEach(films::add);
+            } else {
+                filmRepository.findAll(Sort.by(sort_direction, sort)).forEach(films::add);
             }
 
             //filmRepository.findAll().forEach(films::add);
             //filmRepository.findAll(Sort.by(Sort.Direction.DESC, sort)).forEach(films::add);
             //filmRepository.findAll(PageRequest.of(0, Integer.parseInt(limit), Sort.by(Sort.Direction.DESC, sort))).forEach(films::add);
             //filmRepository.findAllOrderByUpdated(Limit.of(10)).forEach(films::add);
-            filmRepository.findAll(pageable).forEach(films::add);
+
+
 
 
 //            List<Film> all = filmRepository.findAll();
