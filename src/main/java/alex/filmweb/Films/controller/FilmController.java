@@ -3,6 +3,10 @@ package alex.filmweb.Films.controller;
 import alex.filmweb.Films.repository.FilmRepository;
 import alex.filmweb.Films.model.Film;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Limit;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,12 +37,32 @@ public class FilmController {
     FilmRepository filmRepository;
 
     @GetMapping("/films")
-    public ResponseEntity<List<Film>> getAllFilms(){
+    public ResponseEntity<List<Film>> getAllFilms(@RequestParam(name="sort", defaultValue="title") String sort,
+                                                  @RequestParam(name="asc", defaultValue="true") boolean asc,
+                                                  @RequestParam(name="limit", required = false) String limit){
         System.out.println("Called for /films");
-        try{
+        System.out.println("Sort:" + sort);
+        System.out.println("asc:" + asc);
+        System.out.println("Limit:" + limit);
+        try {
+            Sort.Direction sort_direction = Sort.Direction.DESC;
+            if(asc){
+                sort_direction = Sort.Direction.ASC;
+            }
+
             List<Film> films = new ArrayList<Film>();
 
-            filmRepository.findAll().forEach(films::add);
+            Pageable pageable = Pageable.unpaged();
+            if (null != limit){
+                pageable = PageRequest.of(0, Integer.parseInt(limit), Sort.by(sort_direction, sort));
+            }
+
+            //filmRepository.findAll().forEach(films::add);
+            //filmRepository.findAll(Sort.by(Sort.Direction.DESC, sort)).forEach(films::add);
+            //filmRepository.findAll(PageRequest.of(0, Integer.parseInt(limit), Sort.by(Sort.Direction.DESC, sort))).forEach(films::add);
+            //filmRepository.findAllOrderByUpdated(Limit.of(10)).forEach(films::add);
+            filmRepository.findAll(pageable).forEach(films::add);
+
 
 //            List<Film> all = filmRepository.findAll();
 //            for(Film f : all){
