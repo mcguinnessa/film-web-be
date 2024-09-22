@@ -122,7 +122,8 @@ public class FilmController {
         try {
 
             //Film _film = filmRepository.findByTitleAndYear(film.getTitle(), film.getYear());
-            List<Film> _films = filmRepository.findByTitleAndYear(title, year);
+            //List<Film> _films = filmRepository.findByTitleAndYearIgnoreCase(title, year);
+            List<Film> _films = filmRepository.findByTitleIgnoreCaseAndYear(title, year);
 
 
 //            Film _film = filmRepository.save(new Film(film.getTitle(), film.getImdbid(), film.getYear(),

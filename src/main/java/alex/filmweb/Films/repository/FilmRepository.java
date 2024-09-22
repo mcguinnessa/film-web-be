@@ -15,6 +15,8 @@ public interface FilmRepository extends MongoRepository<Film, String> {
 
     List<Film> findByTitleAndYear(String title, Short year);
 
+    List<Film> findByTitleIgnoreCaseAndYear(String title, Short year);
+
     List<Film> findByImdbid(String imdbid);
 
 //    @Modifying
