@@ -260,7 +260,7 @@ public class FilmController {
             return new ResponseEntity<>(saved, HttpStatus.OK);
 
         } catch (Exception e){
-            System.out.println("Failed to update:" + e.toString())
+            System.out.println("Failed to update:" + e.toString());
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
