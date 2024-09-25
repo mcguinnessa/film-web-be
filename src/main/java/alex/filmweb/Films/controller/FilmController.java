@@ -88,7 +88,7 @@ public class FilmController {
 
     @GetMapping("/film/{imdbid}")
     public ResponseEntity<Film> getFilmByImdbId(@PathVariable("imdbid") String imdbid){
-        System.out.println("Called for /films/{imdbid}");
+        System.out.println("Called for /film/{imdbid}");
         try{
 
             //Optional<Film> film = filmRepository.findById(id);
@@ -139,7 +139,7 @@ public class FilmController {
 
     @GetMapping("/unwatched")
     public ResponseEntity<List<Film>> getUnwatchedFilms(){
-        System.out.println("Called for /films");
+        System.out.println("Called for /unwatched");
         try{
             List<Film> films = filmRepository.findByWatchedIs(false);
 
@@ -158,7 +158,7 @@ public class FilmController {
 
     @PostMapping("/film")
     public ResponseEntity<Film> createFilm(@RequestBody Film film) {
-        System.out.println("Called for /films POST:" + film.toString());
+        System.out.println("Called for /film POST:" + film.toString());
         try {
             Film _film = filmRepository.save(new Film(film.getTitle(), film.getImdbid(), film.getYear(),
                     film.getRuntime(), film.getImdb_rating(), film.getClassification(), film.getMedia_type(), film.getWatched()));
