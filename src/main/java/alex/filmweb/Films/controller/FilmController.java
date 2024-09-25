@@ -256,10 +256,11 @@ public class FilmController {
 
             System.out.println("Update Field(found - updated):" + _found.getUpdated().toString());
             Film saved = filmRepository.save(_found);
-            System.out.println("Update Field(saved):" + saved.getUpdated().toString());
+            System.out.println("Update Field(saved successfully):" + saved.getUpdated().toString());
             return new ResponseEntity<>(saved, HttpStatus.OK);
 
         } catch (Exception e){
+            System.out.println("Failed to update:" + e.toString())
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
