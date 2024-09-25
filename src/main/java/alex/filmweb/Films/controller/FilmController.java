@@ -155,7 +155,6 @@ public class FilmController {
         }
     }
 
-
     @PostMapping("/film")
     public ResponseEntity<Film> createFilm(@RequestBody Film film) {
         System.out.println("Called for /film POST:" + film.toString());
@@ -227,6 +226,44 @@ public class FilmController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PutMapping("/film/{imdbid}")
+    public ResponseEntity<Film> updateFilm(@PathVariable("imdbid") String imdbid, @RequestBody Film old) {
+       System.out.println("Called for /film PUT " + imdbid + " " + old.toString() );
+
+        try {
+            List<Film> found = filmRepository.findByImdbid(imdbid);
+            if(found.isEmpty()){
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
+            Film _found = found.get(0);
+            System.out.println("Update Field(found):" + _found.getUpdated().toString());
+
+            Class<?> filmClass= Film.class;
+            Field[] filmFields=filmClass.getDeclaredFields();
+
+            for (Field field : filmFields){
+                System.out.println("Field:" + field.toString());
+                field.setAccessible(true);
+
+                Object value = field.get(old);
+                if(value != null){
+                    field.set(_found, value);
+                    System.out.println("Value:" + value.toString());
+                }
+                field.setAccessible(false);
+            }
+
+            System.out.println("Update Field(found - updated):" + _found.getUpdated().toString());
+            Film saved = filmRepository.save(_found);
+            System.out.println("Update Field(saved):" + saved.getUpdated().toString());
+            return new ResponseEntity<>(saved, HttpStatus.OK);
+
+        } catch (Exception e){
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 //    @PutMapping("/film/set")
 //    public ResponseEntity<Film> setParam(@RequestParam("title") String title, @RequestParam("year") Short year, @RequestParam("watched") Boolean watched) {
