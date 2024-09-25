@@ -164,6 +164,7 @@ public class FilmController {
                     film.getRuntime(), film.getImdb_rating(), film.getClassification(), film.getMedia_type(), film.getWatched()));
             return new ResponseEntity<>(_film, HttpStatus.CREATED);
         } catch (Exception e){
+            System.out.println("Error updating record " + e.getLocalizedMessage());
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
