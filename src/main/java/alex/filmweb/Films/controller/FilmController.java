@@ -213,6 +213,7 @@ public class FilmController {
             }
             Film _found = found.get(0);
             System.out.println("Update Field(found):" + _found.getUpdated().toString());
+            System.out.println("Existing:" + found.toString());
 
             Class<?> filmClass= Film.class;
             Field[] filmFields=filmClass.getDeclaredFields();
@@ -230,6 +231,7 @@ public class FilmController {
             }
 
             System.out.println("Update Field(found - updated):" + _found.getUpdated().toString());
+            System.out.println("New:" + _found.toString());
             Film saved = filmRepository.save(_found);
             System.out.println("Update Field(saved successfully):" + saved.getUpdated().toString());
             return new ResponseEntity<>(saved, HttpStatus.OK);
