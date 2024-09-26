@@ -59,20 +59,6 @@ public class FilmController {
                 filmRepository.findAll(Sort.by(sort_direction, sort)).forEach(films::add);
             }
 
-            //filmRepository.findAll().forEach(films::add);
-            //filmRepository.findAll(Sort.by(Sort.Direction.DESC, sort)).forEach(films::add);
-            //filmRepository.findAll(PageRequest.of(0, Integer.parseInt(limit), Sort.by(Sort.Direction.DESC, sort))).forEach(films::add);
-            //filmRepository.findAllOrderByUpdated(Limit.of(10)).forEach(films::add);
-
-
-
-
-//            List<Film> all = filmRepository.findAll();
-//            for(Film f : all){
-//                System.out.println("Film:" + f.toString());
-//                films.add(f);
-//            }
-
             if(films.isEmpty()){
                 System.out.println("Films is empty");
                 return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
@@ -94,23 +80,12 @@ public class FilmController {
             //Optional<Film> film = filmRepository.findById(id);
             List<Film> film = filmRepository.findByImdbid(imdbid);
 
-//            if(film.isPresent()){
             if(!film.isEmpty()){
                 return new ResponseEntity<>(film.get(0), HttpStatus.OK);
             } else {
-                   return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
 
-
-//            List<Film> films = new ArrayList<Film>();
-//
-//            myFilmRepository.findAll().forEach(films::add);
-//
-//            if(films.isEmpty()){
-//                return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
-//            }
-
-//            return new ResponseEntity<>(films, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -261,39 +236,10 @@ public class FilmController {
 
         } catch (Exception e){
             System.out.println("Failed to update:" + e.toString());
+            System.out.println(e.printStackTrace());
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
 
-//    @PutMapping("/film/set")
-//    public ResponseEntity<Film> setParam(@RequestParam("title") String title, @RequestParam("year") Short year, @RequestParam("watched") Boolean watched) {
-//        System.out.println("Called for /film PUT " + title + " " + year.toString() + " watched:" + watched.toString());
-//
-//        try {
-//
-//            List<Film> _films = filmRepository.findByTitleAndYear(title, year);
-//
-//            System.out.println("_film:" + _films.toString());
-//            if(_films.size() == 1){
-//                Film file_to_update = _films.get(0);
-//                file_to_update.setWatched(watched);
-//                //rc = setWatchedForId(_films[0].id)
-//                System.out.println("Setting Watched:");
-//                Film _film = filmRepository.save(file_to_update);
-//            } else{
-//                System.out.println("Too many films returned:" + _films.size());
-//                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
-//
-//            return new ResponseEntity<>(_films.get(0), HttpStatus.OK);
-//
-//
-////            Film _film = filmRepository.save(new Film(film.getTitle(), film.getImdbid(), film.getYear(),
-////                    film.getRuntime(), film.getImdb_rating(), film.getClassification(), film.getMedia_type(), film.getWatched()));
-////            return new ResponseEntity<>(_film, HttpStatus.CREATED);
-//        } catch (Exception e){
-//            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
 }
