@@ -208,6 +208,7 @@ public class FilmController {
 
         return  new ResponseEntity<>(filmRepository.findById(imdbid)
             .map(_film -> {
+                _film.setImdbid(imdbid);
                 _film.setClassification(new_details.getClassification());
                 _film.setImdb_rating(new_details.getImdb_rating());
                 _film.setRuntime(new_details.getRuntime());
