@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
+import jakarta.validation.Valid;
+
 
 
 import java.util.Date;
@@ -77,11 +79,14 @@ public class FilmController {
         System.out.println("Called for /film/{imdbid}");
         try{
 
-            //Optional<Film> film = filmRepository.findById(id);
-            List<Film> film = filmRepository.findByImdbid(imdbid);
+            Optional<Film> film = filmRepository.findByImdbid(imdbid);
+            //List<Film> film = filmRepository.findByImdbid(imdbid);
 
-            if(!film.isEmpty()){
-                return new ResponseEntity<>(film.get(0), HttpStatus.OK);
+            //if(!film.isEmpty()){
+            if(film.isPresent()){
+                return new ResponseEntity<>(film.get(), HttpStatus.OK);
+                //return new ResponseEntity<>(film.get(0), HttpStatus.OK);
+
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
@@ -143,138 +148,43 @@ public class FilmController {
         }
     }
 
-//    public ResponseEntity<Film> getFilmByImdbId(@PathVariable("id") String id){
-//        System.out.println("Called for /films/{id}");
-
-    @PatchMapping("/film/{imdbid}")
-    public ResponseEntity<Film> setParam(@PathVariable("imdbid") String imdbid, @RequestBody Film partial) {
-        System.out.println("Called for /film PATCH " + imdbid + " partial:" + partial.toString());
-
-        try {
-            List<Film> found = filmRepository.findByImdbid(imdbid);
-            //Optional<Film> found = filmRepository.findById(id);
-            if(found.isEmpty()){
-                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-            }
-            Film _found = found.get(0);
-            System.out.println("Update Field(found):" + _found.getUpdated().toString());
-
-            Class<?> filmClass= Film.class;
-            Field[] filmFields=filmClass.getDeclaredFields();
-
-            for (Field field : filmFields){
-                System.out.println("Field:" + field.toString());
-                field.setAccessible(true);
-
-                Object value = field.get(partial);
-                if(value != null){
-                    field.set(_found, value);
-                }
-                field.setAccessible(false);
-            }
-
-            System.out.println("Update Field(found - updated):" + _found.getUpdated().toString());
-            Film saved = filmRepository.save(_found);
-            System.out.println("Update Field(saved):" + saved.getUpdated().toString());
-            return new ResponseEntity<>(saved, HttpStatus.OK);
-//            List<Film> _films = filmRepository.findByTitleAndYear(title, year);
-//
-//            System.out.println("_film:" + _films.toString());
-//            if(_films.size() == 1){
-//                Film file_to_update = _films.get(0);
-//                file_to_update.setWatched(watched);
-//                //rc = setWatchedForId(_films[0].id)
-//                System.out.println("Setting Watched:");
-//                Film _film = filmRepository.save(file_to_update);
-//            } else{
-//                System.out.println("Too many films returned:" + _films.size());
-//                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
-
-//            return new ResponseEntity<>(_films.get(0), HttpStatus.OK);
-
-
-//            Film _film = filmRepository.save(new Film(film.getTitle(), film.getImdbid(), film.getYear(),
-//                    film.getRuntime(), film.getImdb_rating(), film.getClassification(), film.getMedia_type(), film.getWatched()));
-//            return new ResponseEntity<>(_film, HttpStatus.CREATED);
-        } catch (Exception e){
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
     @PutMapping("/film/{imdbid}")
     public ResponseEntity<Film> updateFilm(@PathVariable("imdbid") String imdbid, @RequestBody Film new_details) {
        System.out.println("Called for /film PUT " + imdbid + " " + new_details.toString() );
 
-        return  new ResponseEntity<>(filmRepository.findById(imdbid)
-            .map(_film -> {
-                _film.setImdbid(imdbid);
-                _film.setClassification(new_details.getClassification());
-                _film.setImdb_rating(new_details.getImdb_rating());
-                _film.setRuntime(new_details.getRuntime());
-                _film.setWatched(new_details.getWatched());
-                return filmRepository.save(_film);
-            })
-            .orElseGet(() -> {
-//                return new ResponseEntity<>(filmRepository.save(new_details), HttpStatus.OK);
-//
-//            }
-                return filmRepository.save(new_details);
-            }), HttpStatus.OK);
+
+       Optional<Film> found = filmRepository.findByImdbid(imdbid);
+       //List<Film> found = filmRepository.findByImdbid(imdbid);
+       ///if(!found.isEmpty()){
+       if(found.isPresent()){
+          System.out.println("Found");
+          System.out.println("Watched Boolean:" + new_details.getWatched());
+          Film film = found.get();
+          //Film _film = found.get(0);
+          //System.out.println("  Found Film:" + film.toString()); 
+          System.out.println("  Found Film " +  film.toString());
+//          _film.setTitle(new_details.getTitle());
+//          _film.setYear(new_details.getYear());
+//          _film.setImdbid(imdbid);
+//          _film.setClassification(new_details.getClassification());
+//          _film.setImdb_rating(new_details.getImdb_rating());
+//          _film.setRuntime(new_details.getRuntime());
+
+          if (new_details.getWatched() != null){
+             film.setWatched(new_details.getWatched());
+          }
+
+          System.out.println("  Put Film:" + film.toString()); 
+          System.out.println(" Before saving imdbid:" + film.getImdbid().toString());
+          System.out.println(" Before saving id:" + film.getId().toString());
+          Film updated = filmRepository.save(film);
+          System.out.println("Updated film: " +  updated.toString());
+          return ResponseEntity.ok(updated);
+       } else {
+          System.out.println("Not found");
+          return ResponseEntity.notFound().build();
+       }
+
    }
-
-
-//    @PutMapping("/addresses/{id}")
-//    Address replaceEmployee(@RequestBody Address newAddress, @PathVariable Long id) {
-//
-//        return repository.findById(id)
-//            .map(address -> {
-//                address.setCity(newAddress.getCity());
-//                address.setPin(newAddress.getPostalCode());
-//                return repository.save(address);
-//            })
-//            .orElseGet(() -> {
-//                return repository.save(newAddress);
-//            });
-//    }
-
-
-//        try {
-//            List<Film> found = filmRepository.findByImdbid(imdbid);
-//            if(found.isEmpty()){
-//                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-//            }
-//            Film _found = found.get(0);
-//            System.out.println("Update Field(found):" + _found.getUpdated().toString());
-//            System.out.println("Existing:" + found.toString());
-//
-//            Class<?> filmClass= Film.class;
-//            Field[] filmFields=filmClass.getDeclaredFields();
-//
-//            for (Field field : filmFields){
-//                System.out.println("Field:" + field.toString());
-//                field.setAccessible(true);
-//
-//                Object value = field.get(old);
-//                if(value != null){
-//                    field.set(_found, value);
-//                    System.out.println("Value:" + value.toString());
-//                }
-//                field.setAccessible(false);
-//            }
-//
-//            System.out.println("Update Field(found - updated):" + _found.getUpdated().toString());
-//            System.out.println("New:" + _found.toString());
-//            Film saved = filmRepository.save(_found);
-//            System.out.println("Update Field(saved successfully):" + saved.getUpdated().toString());
-//            return new ResponseEntity<>(saved, HttpStatus.OK);
-//
-//        } catch (Exception e){
-//            System.out.println("Failed to update:" + e.toString());
-//            e.printStackTrace(System.out);
-//            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
-
 
 }

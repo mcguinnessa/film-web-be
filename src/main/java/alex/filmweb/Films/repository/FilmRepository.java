@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Optional;
 
 
 //Now we can use MongoRepository’s methods: save(), findOne(),
@@ -17,7 +18,7 @@ public interface FilmRepository extends MongoRepository<Film, String> {
 
     List<Film> findByTitleIgnoreCaseAndYear(String title, Short year);
 
-    List<Film> findByImdbid(String imdbid);
+    Optional<Film> findByImdbid(String imdbid);
 
 //    @Modifying
 //    @Query("update Film ear set ear.status = ?1 where ear.id = ?2")

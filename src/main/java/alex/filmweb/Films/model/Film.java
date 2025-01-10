@@ -5,9 +5,12 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.data.mongodb.core.index.Indexed;
+
 
 
 import java.util.Date;
+import java.util.Objects;
 
 // This overrides the collection name
 //Not using Entity as that maps to a table in a relational DB, Documents defines it as a NoSQL DB
@@ -18,15 +21,16 @@ public class Film {
     @Id
     private String id;
 
-
+    @Indexed(unique = true) 
     private String imdbid;
 
     @NotNull
     @NotEmpty
     private String title;
+
     @NotNull
-    @NotEmpty
     private Short year;
+
     private Short runtime;
     private Float imdb_rating;
     private String classification;
@@ -54,6 +58,10 @@ public class Film {
     }
 
     public Film(){
+    }
+
+    public String getId(){
+       return id;
     }
 
     public String getTitle(){
@@ -121,7 +129,6 @@ public class Film {
         this.updated = updated;
     }
 
-
     @Override
     public String toString() {
         return "Film{" +
@@ -144,5 +151,23 @@ public class Film {
 
     public void setImdbid(String imdbid) {
         this.imdbid = imdbid;
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true; // Same reference
+        if (obj == null || getClass() != obj.getClass()) return false; // Null or different class
+
+        Film film = (Film) obj; // Cast to Film
+
+        // Compare using unique fields
+        return Objects.equals(id, film.id) &&
+                Objects.equals(imdbid, film.imdbid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, imdbid); // Hash using unique fields
     }
 }
