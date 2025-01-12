@@ -26,7 +26,7 @@ public interface FilmRepository extends MongoRepository<Film, String> {
 //    @Query("update Film ear set ear.status = ?1 where ear.id = ?2")
 //    int setStatusForEARAttachment(Integer status, Long id);
 
-    @Query(value = "{ 'watched': true }", sort = "{ 'imdb_rating': -1 }")
+    @Query(value = "{ 'watched': false }", sort = "{ 'imdb_rating': -1 }")
     List<Film> findByWatchedFalseOrderByImdbRatingDesc(boolean isWatched);
 
 //    int setWatchedForId(String id)

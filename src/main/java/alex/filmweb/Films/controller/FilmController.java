@@ -122,7 +122,7 @@ public class FilmController {
         System.out.println("Called for /unwatched");
         try{
             //List<Film> films = filmRepository.findByWatchedIs(false);
-            List<Film> films = filmRepository.findByWatchedTrueOrderByImdbRatingDesc(false);
+            List<Film> films = filmRepository.findByWatchedFalseOrderByImdbRatingDesc(false);
 
             if(films.isEmpty()){
                 System.out.println("Films is empty");
