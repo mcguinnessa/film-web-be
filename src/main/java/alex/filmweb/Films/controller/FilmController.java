@@ -121,7 +121,8 @@ public class FilmController {
     public ResponseEntity<List<Film>> getUnwatchedFilms(){
         System.out.println("Called for /unwatched");
         try{
-            List<Film> films = filmRepository.findByWatchedIs(false);
+            //List<Film> films = filmRepository.findByWatchedIs(false);
+            List<Film> films = filmRepository.findByWatchedTrueOrderByImdbRatingDesc(false);
 
             if(films.isEmpty()){
                 System.out.println("Films is empty");

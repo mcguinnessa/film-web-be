@@ -4,6 +4,8 @@ import alex.filmweb.Films.model.Film;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.data.mongodb.repository.Query;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +25,9 @@ public interface FilmRepository extends MongoRepository<Film, String> {
 //    @Modifying
 //    @Query("update Film ear set ear.status = ?1 where ear.id = ?2")
 //    int setStatusForEARAttachment(Integer status, Long id);
-    List<Film> findByWatchedIs(boolean isWatched);
+
+    @Query(value = "{ 'watched': true }", sort = "{ 'imdb_rating': -1 }")
+    List<Film> findByWatchedFalseOrderByImdbRatingDesc(boolean isWatched);
 
 //    int setWatchedForId(String id)
 
