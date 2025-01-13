@@ -136,6 +136,25 @@ public class FilmController {
         }
     }
 
+    @GetMapping("/owned")
+    public ResponseEntity<List<Film>> getOwnedFilms(){
+        System.out.println("Called for /owned");
+        try{
+            //List<Film> films = filmRepository.findByWatchedIs(false);
+            List<Film> films = filmRepository.findOwned();
+
+            if(films.isEmpty()){
+                System.out.println("Films is empty");
+                return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+            }
+
+            return new ResponseEntity<>(films, HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println("Error on Films " + e.getLocalizedMessage());
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/film")
     public ResponseEntity<Film> createFilm(@RequestBody Film film) {
         System.out.println("Called for /film POST:" + film.toString());
