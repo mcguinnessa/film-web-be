@@ -174,6 +174,18 @@ public class FilmController {
           if (new_details.getWatched() != null){
              film.setWatched(new_details.getWatched());
           }
+          if (new_details.getImdbid() != null){
+             film.setImdbid(new_details.getImdbid());
+          }
+          if (new_details.getImdb_rating() != null){
+             film.getImdb_rating(new_details.setImdb_rating());
+          }
+          if (new_details.getRuntime() != null){
+             film.setRuntime(new_details.getRuntime());
+          }
+          if (new_details.getClassification() != null){
+             film.setClassification(new_details.getClassification());
+          }
 
           System.out.println("  Put Film:" + film.toString()); 
           System.out.println(" Before saving imdbid:" + film.getImdbid().toString());
