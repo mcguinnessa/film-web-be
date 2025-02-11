@@ -197,7 +197,7 @@ public class FilmController {
              film.setImdbid(new_details.getImdbid());
           }
           if (new_details.getImdb_rating() != null){
-             film.getImdb_rating(new_details.setImdb_rating());
+             film.setImdb_rating(new_details.getImdb_rating());
           }
           if (new_details.getRuntime() != null){
              film.setRuntime(new_details.getRuntime());
