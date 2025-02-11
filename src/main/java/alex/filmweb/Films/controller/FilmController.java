@@ -205,6 +205,7 @@ public class FilmController {
           if (new_details.getClassification() != null){
              film.setClassification(new_details.getClassification());
           }
+          film.setUpdated();
 
           System.out.println("  Put Film:" + film.toString()); 
           System.out.println(" Before saving imdbid:" + film.getImdbid().toString());
