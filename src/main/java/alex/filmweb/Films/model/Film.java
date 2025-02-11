@@ -125,8 +125,11 @@ public class Film {
         return updated;
     }
 
-    public void setUpdated(Date updated){
-        this.updated = updated;
+//    public void setUpdated(Date updated){
+//        this.updated = updated;
+//    }
+    public void setUpdated(){
+        this.updated = new Date();
     }
 
     @Override
